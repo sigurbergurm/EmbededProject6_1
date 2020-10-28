@@ -1,6 +1,5 @@
 #include <iostream>
 #include <unistd.h>
-
 int main()
 {
   int counter = 0;
