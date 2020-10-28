@@ -26,7 +26,7 @@ static void *get_shared_memory(void)
   struct shared_data *shm_p; 
   /* Attempt to create the shared memory segment */ 
 
-  shm_fd = shm_open(SHM_SEGMENT_NAME, O_CREAT | O_EXCL | O_RDWR, 0666); 
+  shm_fd = shm_open(SHM_SEGMENT_NAME, O_CREAT | O_EXCL | O_RDONLY, 0666); 
  
   if (shm_fd > 0) { 
     /* succeeded: expand it to the desired size (Note: dont't do 
@@ -77,7 +77,8 @@ int main(int argc, char *argv[])
   printf("%s PID=%d\n", argv[0], getpid()); 
   shm_p = get_shared_memory(); 
 
-  int counter;
+  int mult = atoi(argv[1]);
+  int numb;
   while (1) { 
     printf("Press enter to see the current contents of shm\n"); 
     getchar(); 
@@ -85,10 +86,8 @@ int main(int argc, char *argv[])
     printf("%s\n", shm_p); 
     
     /* Write our signature to the shared memory */ 
-
-    counter = atoi(shm_p) + 1;
-    
-    sprintf(shm_p, "%d\n", counter); 
+    numb = atoi(shm_p) * mult;
+    sprintf(shm_p, "%d\n", numb); 
     sem_post(demo_sem); 
   } 
   return 0; 
